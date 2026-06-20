@@ -1,0 +1,1139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Schezwan Story — Indo-Chinese & Western Kitchen</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,800;9..144,900&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.2/css/all.min.css">
+<style>
+  :root{
+    --bg:#FFF8F0;
+    --bg-2:#FAEEDD;
+    --fg:#1A0F0A;
+    --muted:#7A5F52;
+    --accent:#C8102E;
+    --accent-2:#E63946;
+    --chili:#FF6B35;
+    --card:#FFFFFF;
+    --border:rgba(26,15,10,0.08);
+    --shadow:0 8px 30px rgba(200,16,46,0.08);
+    --shadow-hover:0 18px 50px rgba(200,16,46,0.18);
+    --success:#228B57;
+    --danger:#999999;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html,body{height:100%;}
+  body{
+    font-family:'DM Sans',system-ui,sans-serif;
+    background:var(--bg);
+    color:var(--fg);
+    overflow-x:hidden;
+    line-height:1.6;
+  }
+  body::before{
+    content:"";
+    position:fixed;inset:0;
+    pointer-events:none;
+    z-index:1;
+    background-image:
+      radial-gradient(circle at 20% 30%, rgba(200,16,46,0.04), transparent 40%),
+      radial-gradient(circle at 80% 70%, rgba(255,107,53,0.04), transparent 40%);
+  }
+
+  h1,h2,h3,h4,.display{
+    font-family:'Fraunces',serif;
+    font-weight:800;
+    letter-spacing:-0.02em;
+    color:var(--fg);
+  }
+
+  #root{position:relative;z-index:2;}
+
+  /* ===== Fixed Corner Chutney Image ===== */
+  .corner-chutney {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    width: 110px;
+    height: 110px;
+    border-radius: 50%;
+    border: 5px solid #fff;
+    box-shadow: 0 10px 25px rgba(200,16,46,0.35);
+    z-index: 60;
+    object-fit: cover;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+  }
+  .corner-chutney:hover { transform: scale(1.1) rotate(5deg); }
+  .corner-tooltip {
+    position: fixed;
+    bottom: 60px;
+    right: 145px;
+    background: var(--fg);
+    color: var(--bg);
+    padding: 8px 14px;
+    border-radius: 8px;
+    font-size: 12px;
+    font-weight: 600;
+    opacity: 0;
+    transform: translateX(10px);
+    transition: opacity 0.3s, transform 0.3s;
+    z-index: 61;
+    pointer-events: none;
+    white-space: nowrap;
+  }
+  .corner-chutney:hover + .corner-tooltip {
+    opacity: 1;
+    transform: translateX(0);
+  }
+
+  /* ===== Header ===== */
+  .topbar{
+    position:sticky;top:0;z-index:50;
+    background:rgba(255,248,240,0.85);
+    backdrop-filter:blur(12px);
+    border-bottom:1px solid var(--border);
+  }
+  .nav{
+    max-width:1280px;margin:0 auto;
+    padding:18px 32px;
+    display:flex;align-items:center;justify-content:space-between;
+    gap:24px;
+  }
+  .brand{display:flex;align-items:center;gap:12px;cursor:pointer;}
+  .brand-mark{
+    width:44px;height:44px;
+    background:linear-gradient(135deg,var(--accent),var(--chili));
+    border-radius:50% 50% 50% 50% / 60% 60% 40% 40%;
+    position:relative;
+    box-shadow:0 6px 16px rgba(200,16,46,0.35);
+    transform:rotate(-15deg);
+  }
+  .brand-mark::after{
+    content:"";position:absolute;
+    top:8px;left:10px;
+    width:14px;height:18px;
+    background:rgba(255,255,255,0.45);
+    border-radius:50%;
+    filter:blur(1px);
+  }
+  .brand-text{display:flex;flex-direction:column;line-height:1;}
+  .brand-text strong{font-family:'Fraunces',serif;font-weight:900;font-size:22px;color:var(--fg);}
+  .brand-text span{font-size:11px;letter-spacing:0.18em;color:var(--accent);text-transform:uppercase;font-weight:600;}
+
+  .nav-links{display:flex;gap:28px;align-items:center;}
+  .nav-links a{
+    color:var(--fg);text-decoration:none;font-weight:500;font-size:15px;
+    position:relative;transition:color .2s;
+  }
+  .nav-links a::after{
+    content:"";position:absolute;left:0;bottom:-6px;width:0;height:2px;
+    background:var(--accent);transition:width .3s;
+  }
+  .nav-links a:hover{color:var(--accent);}
+  .nav-links a:hover::after{width:100%;}
+
+  .auth-area { display: flex; align-items: center; gap: 16px; }
+  
+  .user-badge {
+    font-size: 14px; font-weight: 600; color: var(--fg);
+    display: flex; align-items: center; gap: 8px;
+    background: rgba(200,16,46,0.05);
+    padding: 8px 14px;
+    border-radius: 50px;
+    border: 1px solid var(--border);
+  }
+  .user-badge i { color: var(--accent); font-size: 16px; }
+  .user-badge.admin-badge { background: #1A0F0A; color: #FFF8F0; }
+  .user-badge.admin-badge i { color: var(--chili); }
+
+  .auth-btn {
+    background: transparent; color: var(--fg);
+    border: 1.5px solid var(--fg);
+    padding: 10px 20px; border-radius: 50px;
+    font-family: inherit; font-weight: 600; font-size: 14px;
+    cursor: pointer; transition: all .2s;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .auth-btn:hover { background: var(--fg); color: var(--bg); }
+
+  .cart-btn{
+    position:relative;
+    background:var(--fg);color:var(--bg);
+    border:none;border-radius:50px;
+    padding:12px 22px 12px 18px;
+    font-family:inherit;font-weight:600;font-size:14px;
+    cursor:pointer;display:flex;align-items:center;gap:10px;
+    transition:transform .2s, background .2s;
+  }
+  .cart-btn:hover{background:var(--accent);transform:translateY(-2px);}
+  .cart-count{
+    background:var(--accent);color:white;
+    min-width:22px;height:22px;border-radius:50%;
+    display:inline-flex;align-items:center;justify-content:center;
+    font-size:12px;font-weight:700;padding:0 6px;
+  }
+  .cart-btn:hover .cart-count{background:white;color:var(--accent);}
+
+  @media(max-width:780px){.nav-links{display:none;} .corner-chutney{width:80px;height:80px;} .auth-btn span{display:none;}}
+
+  /* ===== Hero ===== */
+  .hero{
+    position:relative;
+    max-width:1280px;margin:0 auto;
+    padding:80px 32px 100px;
+    display:grid;grid-template-columns:1.1fr 1fr;gap:60px;align-items:center;
+    overflow:hidden;
+  }
+  @media(max-width:900px){.hero{grid-template-columns:1fr;padding:60px 24px 80px; text-align:center;} .hero-cta, .hero-stats{justify-content:center;} .hero p{margin-left:auto;margin-right:auto;}}
+
+  .hero-eyebrow{
+    display:inline-flex;align-items:center;gap:10px;
+    background:rgba(200,16,46,0.08);
+    color:var(--accent);
+    padding:8px 16px;border-radius:50px;
+    font-size:12px;font-weight:600;letter-spacing:0.12em;text-transform:uppercase;
+    margin-bottom:24px;
+  }
+  .hero-eyebrow .pulse-dot{
+    width:8px;height:8px;border-radius:50%;background:var(--accent);
+    animation:pulse 2s infinite;
+  }
+  @keyframes pulse{
+    0%,100%{box-shadow:0 0 0 0 rgba(200,16,46,0.6);}
+    50%{box-shadow:0 0 0 8px rgba(200,16,46,0);}
+  }
+  .hero h1{
+    font-size:clamp(48px,7vw,88px);
+    line-height:0.95;
+    margin-bottom:24px;
+  }
+  .hero h1 em{
+    font-style:italic;
+    color:var(--accent);
+    font-weight:900;
+    position:relative;
+  }
+  .hero h1 em::after{
+    content:"";position:absolute;left:0;right:0;bottom:8px;height:14px;
+    background:rgba(255,107,53,0.18);z-index:-1;border-radius:6px;
+  }
+  .hero p{
+    color:var(--muted);font-size:18px;max-width:480px;margin-bottom:32px;
+  }
+  .hero-cta{display:flex;gap:16px;flex-wrap:wrap;}
+  .btn-primary{
+    background:var(--accent);color:white;border:none;
+    padding:16px 28px;border-radius:50px;
+    font-family:inherit;font-weight:600;font-size:15px;
+    cursor:pointer;display:inline-flex;align-items:center;gap:10px;
+    box-shadow:0 10px 24px rgba(200,16,46,0.3);
+    transition:transform .2s, box-shadow .2s;
+  }
+  .btn-primary:hover{transform:translateY(-3px);box-shadow:0 16px 32px rgba(200,16,46,0.4);}
+  .btn-ghost{
+    background:transparent;color:var(--fg);
+    border:1.5px solid var(--border);
+    padding:16px 28px;border-radius:50px;
+    font-family:inherit;font-weight:600;font-size:15px;
+    cursor:pointer;display:inline-flex;align-items:center;gap:10px;
+    transition:border-color .2s, background .2s;
+  }
+  .btn-ghost:hover{border-color:var(--accent);background:rgba(200,16,46,0.05);}
+
+  .hero-stats{
+    display:flex;gap:36px;margin-top:48px;padding-top:32px;
+    border-top:1px solid var(--border);
+  }
+  .stat strong{font-family:'Fraunces',serif;font-size:32px;font-weight:800;display:block;color:var(--accent);}
+  .stat span{font-size:13px;color:var(--muted);}
+
+  .hero-visual{
+    position:relative;height:540px;
+    display:flex;align-items:center;justify-content:center;
+  }
+  .hero-bowl-img{
+    position:relative;
+    width:420px;height:420px;border-radius:50%;
+    object-fit:cover;
+    box-shadow: 0 30px 80px rgba(200,16,46,0.4);
+    border: 8px solid #fff;
+    animation:rotateBowl 30s linear infinite;
+  }
+  @keyframes rotateBowl{
+    0%{transform:rotate(0deg);}
+    100%{transform:rotate(360deg);}
+  }
+  .hero-ring{
+    position:absolute;width:480px;height:480px;border-radius:50%;
+    border:2px dashed rgba(200,16,46,0.3);
+    animation:rotateBowl 40s linear infinite reverse;
+  }
+  .hero-ring::before, .hero-ring::after{
+    content:"";position:absolute;width:12px;height:12px;border-radius:50%;
+    background:var(--accent);top:-6px;left:50%;
+    box-shadow:0 0 12px var(--accent);
+  }
+  .hero-ring::after{top:auto;bottom:-6px;}
+
+  /* ===== Sections ===== */
+  .section{
+    max-width:1280px;margin:0 auto;
+    padding:80px 32px;
+    position:relative;
+  }
+  .section-head{
+    display:flex;justify-content:space-between;align-items:flex-end;
+    margin-bottom:48px;gap:24px;flex-wrap:wrap;
+  }
+  .section-title{ font-size:clamp(34px,5vw,56px);line-height:1; }
+  .section-title em{font-style:italic;color:var(--accent);}
+  .section-sub{color:var(--muted);max-width:420px;font-size:16px;}
+
+  .filters{ display:flex;gap:10px;flex-wrap:wrap;margin-bottom:36px; }
+  .filter-chip{
+    background:var(--card);border:1px solid var(--border);
+    padding:10px 20px;border-radius:50px;
+    font-family:inherit;font-size:14px;font-weight:500;
+    cursor:pointer;transition:all .2s; color:var(--fg);
+  }
+  .filter-chip:hover{border-color:var(--accent);color:var(--accent);}
+  .filter-chip.active{ background:var(--fg);color:var(--bg);border-color:var(--fg); }
+
+  .menu-grid{
+    display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));
+    gap:24px;
+  }
+  .dish{
+    background:var(--card); border-radius:24px; overflow:hidden;
+    border:1px solid var(--border); box-shadow:var(--shadow);
+    transition:transform .3s, box-shadow .3s;
+    position:relative; display:flex;flex-direction:column;
+  }
+  .dish:hover{transform:translateY(-6px);box-shadow:var(--shadow-hover);}
+  .dish-img{ height:220px;overflow:hidden;position:relative; background:var(--bg-2); }
+  .dish-img img{width:100%;height:100%;object-fit:cover;transition:transform .5s;}
+  .dish:hover .dish-img img{transform:scale(1.08);}
+  .dish-tag{
+    position:absolute;top:14px;left:14px;
+    background:var(--fg);color:var(--bg);
+    padding:6px 12px;border-radius:50px;
+    font-size:11px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;
+  }
+  .dish-spice{
+    position:absolute;top:14px;right:14px;
+    background:rgba(255,255,255,0.95);backdrop-filter:blur(8px);
+    padding:6px 10px;border-radius:50px;
+    font-size:12px;font-weight:600;color:var(--accent);
+    display:flex;align-items:center;gap:4px;
+  }
+  .dish-body{padding:22px;display:flex;flex-direction:column;flex:1;}
+  .dish-name{font-size:20px;margin-bottom:6px;}
+  .dish-desc{color:var(--muted);font-size:14px;margin-bottom:18px;flex:1;}
+  .dish-foot{display:flex;justify-content:space-between;align-items:center;}
+  .dish-price{font-family:'Fraunces',serif;font-weight:800;font-size:22px;color:var(--accent);}
+  .dish-price small{font-size:13px;color:var(--muted);font-weight:500;margin-left:4px;}
+  .add-btn{
+    background:var(--fg);color:var(--bg);border:none;
+    width:42px;height:42px;border-radius:50%;
+    cursor:pointer;font-size:16px;
+    display:flex;align-items:center;justify-content:center;
+    transition:background .2s, transform .2s;
+  }
+  .add-btn:hover{background:var(--accent);transform:rotate(90deg) scale(1.1);}
+
+  /* ===== Cart Drawer ===== */
+  .overlay{
+    position:fixed;inset:0;background:rgba(26,15,10,0.4);
+    backdrop-filter:blur(4px);z-index:80;
+    opacity:0;pointer-events:none;transition:opacity .3s;
+  }
+  .overlay.open{opacity:1;pointer-events:auto;}
+  .cart-drawer{
+    position:fixed;top:0;right:0;height:100%;width:420px;max-width:90vw;
+    background:var(--bg);z-index:90;
+    transform:translateX(100%);transition:transform .35s cubic-bezier(.4,0,.2,1);
+    display:flex;flex-direction:column;
+    box-shadow:-20px 0 60px rgba(0,0,0,0.15);
+  }
+  .cart-drawer.open{transform:translateX(0);}
+  .cart-head{ padding:24px 28px;border-bottom:1px solid var(--border); display:flex;justify-content:space-between;align-items:center; }
+  .cart-head h3{font-size:24px;}
+  .close-x{ background:none;border:none;width:36px;height:36px;border-radius:50%; cursor:pointer;font-size:18px;color:var(--muted); transition:background .2s; }
+  .close-x:hover{background:rgba(0,0,0,0.05);color:var(--fg);}
+  .cart-items{flex:1;overflow-y:auto;padding:16px 28px;}
+  .cart-empty{ text-align:center;padding:60px 20px;color:var(--muted); }
+  .cart-empty i{font-size:48px;color:var(--accent);opacity:0.3;margin-bottom:16px;display:block;}
+  .cart-item{ display:flex;gap:14px;padding:16px 0;border-bottom:1px solid var(--border); align-items:center; }
+  .cart-item-img{ width:64px;height:64px;border-radius:14px;overflow:hidden;flex-shrink:0; background:var(--bg-2); }
+  .cart-item-img img{width:100%;height:100%;object-fit:cover;}
+  .cart-item-info{flex:1;min-width:0;}
+  .cart-item-info h4{font-size:15px;font-family:'DM Sans';font-weight:600;margin-bottom:2px;}
+  .cart-item-info small{color:var(--muted);font-size:13px;}
+  .qty{ display:flex;align-items:center;gap:8px;margin-top:8px; }
+  .qty button{ width:26px;height:26px;border-radius:50%; border:1px solid var(--border);background:white; cursor:pointer;font-size:14px;color:var(--fg); display:flex;align-items:center;justify-content:center; transition:all .2s; }
+  .qty button:hover{border-color:var(--accent);color:var(--accent);}
+  .qty span{min-width:20px;text-align:center;font-weight:600;font-size:14px;}
+  .cart-item-price{font-family:'Fraunces',serif;font-weight:700;color:var(--accent);font-size:16px;}
+  .cart-foot{ padding:24px 28px;border-top:1px solid var(--border); background:var(--card); }
+  .cart-total{ display:flex;justify-content:space-between;align-items:center; margin-bottom:16px;font-size:15px; }
+  .cart-total strong{font-size:14px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:0.1em;}
+  .cart-total .amount{font-family:'Fraunces',serif;font-weight:800;font-size:30px;color:var(--fg);}
+  .cart-total .amount small{font-size:14px;color:var(--muted);font-weight:500;margin-left:4px;}
+  .checkout-btn{ width:100%;background:var(--accent);color:white;border:none; padding:16px;border-radius:14px; font-family:inherit;font-weight:600;font-size:15px; cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px; transition:background .2s, transform .2s; }
+  .checkout-btn:hover{background:var(--accent-2);transform:translateY(-2px);}
+  .checkout-btn:disabled{background:var(--border);cursor:not-allowed;transform:none;}
+
+  /* ===== Orders & Status Management ===== */
+  .orders-list{display:flex;flex-direction:column;gap:16px;}
+  .order-card{ 
+    background:var(--card);border:1px solid var(--border);border-radius:20px; 
+    padding:24px 28px;display:flex;justify-content:space-between;align-items:center;gap:24px; 
+    box-shadow:var(--shadow);transition:transform .2s; flex-wrap:wrap; 
+  }
+  .order-card:hover{transform:translateX(6px);}
+  .order-id{font-family:'Fraunces',serif;font-weight:800;font-size:18px;}
+  .order-id small{display:block;font-family:'DM Sans';font-weight:500;font-size:12px;color:var(--muted);margin-top:2px;}
+  .order-items{color:var(--muted);font-size:14px;flex:1;min-width:200px;}
+  .order-total{font-family:'Fraunces',serif;font-weight:800;font-size:22px;color:var(--accent);}
+  
+  .order-status{ 
+    display:inline-flex;align-items:center;gap:6px; 
+    padding:6px 14px;border-radius:50px;font-size:12px;font-weight:600; 
+  }
+  .order-status .dot{width:8px;height:8px;border-radius:50%;animation:pulse 2s infinite;}
+  
+  .status-preparing { background:rgba(255, 107, 53, 0.1); color: var(--chili); }
+  .status-preparing .dot { background: var(--chili); }
+  .status-completed { background:rgba(34,139,87,0.1); color:#228B57; }
+  .status-completed .dot { background:#228B57; animation: none; }
+  .status-cancelled { background:rgba(26,15,10,0.08); color:var(--muted); }
+  .status-cancelled .dot { background:var(--muted); animation: none; }
+
+  .order-actions { display: flex; gap: 10px; }
+  .action-btn {
+    padding: 8px 16px; border-radius: 50px; border: 1px solid transparent;
+    cursor: pointer; font-weight: 600; font-size: 12px; font-family: inherit;
+    transition: all .2s; display: flex; align-items: center; gap: 6px;
+  }
+  .cancel-btn { background: rgba(26,15,10,0.05); color: var(--muted); border-color: var(--border); }
+  .cancel-btn:hover { background: rgba(26,15,10,0.1); }
+  .complete-btn { background: var(--success); color: white; }
+  .complete-btn:hover { opacity: 0.9; }
+
+  .empty-state{ text-align:center;padding:80px 20px; background:var(--card);border-radius:24px;border:1px dashed var(--border); }
+  .empty-state i{font-size:56px;color:var(--accent);opacity:0.25;margin-bottom:16px;display:block;}
+  .empty-state h3{font-size:24px;margin-bottom:8px;}
+  .empty-state p{color:var(--muted);}
+
+  /* ===== Toast ===== */
+  .toast-wrap{ position:fixed;top:24px;left:50%;transform:translateX(-50%); z-index:120;display:flex;flex-direction:column;gap:10px; pointer-events:none; }
+  .toast{ background:var(--fg);color:var(--bg); padding:14px 22px;border-radius:50px; font-size:14px;font-weight:500; box-shadow:0 12px 32px rgba(0,0,0,0.25); display:flex;align-items:center;gap:10px; animation:toastIn .3s ease, toastOut .3s ease 2.5s forwards; }
+  .toast i{color:var(--chili);}
+  @keyframes toastIn{from{opacity:0;transform:translateY(-20px);}to{opacity:1;transform:translateY(0);}}
+  @keyframes toastOut{to{opacity:0;transform:translateY(-20px);}}
+
+  /* ===== Modals ===== */
+  .modal{ position:fixed;inset:0;z-index:100; background:rgba(26,15,10,0.6);backdrop-filter:blur(8px); display:flex;align-items:center;justify-content:center;padding:24px; opacity:0;pointer-events:none;transition:opacity .3s; }
+  .modal.open{opacity:1;pointer-events:auto;}
+  .modal-card{ background:var(--bg);border-radius:28px; padding:40px;max-width:440px;width:100%; text-align:center;position:relative; transform:scale(0.9);transition:transform .3s; overflow:hidden; }
+  .modal.open .modal-card{transform:scale(1);}
+  .modal-icon{ width:80px;height:80px;margin:0 auto 20px; background:linear-gradient(135deg,var(--accent),var(--chili)); border-radius:50%; display:flex;align-items:center;justify-content:center; color:white;font-size:34px; box-shadow:0 12px 30px rgba(200,16,46,0.4); animation:popBounce .5s cubic-bezier(.34,1.56,.64,1); }
+  @keyframes popBounce{0%{transform:scale(0);}100%{transform:scale(1);}}
+  .modal-card h3{font-size:28px;margin-bottom:8px;}
+  .modal-card p{color:var(--muted);margin-bottom:24px;}
+  .modal-order-id{ background:var(--card);border:1px dashed var(--border); padding:14px;border-radius:14px;margin-bottom:24px; font-family:'Fraunces',serif;font-weight:700;font-size:16px; color:var(--accent); }
+
+  /* ===== Auth Modal ===== */
+  .auth-form { text-align: left; margin-top: 20px; }
+  .auth-input { 
+    width: 100%; padding: 14px 16px; margin-bottom: 14px; 
+    border: 1px solid var(--border); border-radius: 14px; 
+    font-family: inherit; font-size: 15px; background: var(--bg-2); 
+    transition: border-color .2s;
+  }
+  .auth-input:focus { outline: none; border-color: var(--accent); background: white; }
+  .auth-error { color: var(--accent); font-size: 13px; margin-bottom: 14px; text-align: center; font-weight: 500; }
+  .auth-switch { 
+    text-align: center; margin-top: 20px; font-size: 14px; color: var(--muted); 
+  }
+  .auth-switch button { 
+    background: none; border: none; color: var(--accent); 
+    font-weight: 700; cursor: pointer; font-family: inherit; font-size: 14px;
+    padding: 0 4px;
+  }
+  .auth-submit-btn { width: 100%; justify-content: center; margin-top: 10px; }
+  .auth-hint { 
+    font-size: 12px; color: var(--muted); margin-top: 16px; 
+    padding-top: 16px; border-top: 1px dashed var(--border); 
+  }
+
+  /* ===== Footer ===== */
+  footer{ background:var(--fg);color:var(--bg); padding:60px 32px 32px;margin-top:60px; position:relative;overflow:hidden; }
+  .footer-inner{ max-width:1280px;margin:0 auto; display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:48px; }
+  @media(max-width:780px){.footer-inner{grid-template-columns:1fr 1fr;}}
+  footer h4{color:var(--bg);font-size:18px;margin-bottom:16px;}
+  footer ul{list-style:none;}
+  footer ul li{margin-bottom:10px;color:rgba(255,248,240,0.7);font-size:14px;}
+  footer ul li a{color:inherit;text-decoration:none;transition:color .2s;}
+  footer ul li a:hover{color:var(--chili);}
+  .footer-brand{color:rgba(255,248,240,0.7);font-size:14px;max-width:300px;margin-top:12px;}
+  .footer-bottom{ max-width:1280px;margin:48px auto 0;padding-top:24px; border-top:1px solid rgba(255,248,240,0.1); display:flex;justify-content:space-between;align-items:center; color:rgba(255,248,240,0.5);font-size:13px; }
+
+  ::-webkit-scrollbar{width:10px;height:10px;}
+  ::-webkit-scrollbar-track{background:var(--bg-2);}
+  ::-webkit-scrollbar-thumb{background:var(--accent);border-radius:10px;border:2px solid var(--bg-2);}
+</style>
+</head>
+<body>
+<div id="root"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/react@18.2.0/umd/react.production.min.js" crossorigin></script>
+<script src="https://cdn.jsdelivr.net/npm/react-dom@18.2.0/umd/react-dom.production.min.js" crossorigin></script>
+<script src="https://cdn.jsdelivr.net/npm/htm@3.1.1/dist/htm.umd.js" crossorigin></script>
+
+<script>
+const html = htm.bind(React.createElement);
+const { useState, useEffect, useMemo } = React;
+
+const CHUTNEY_IMG = "https://images.unsplash.com/photo-1583224944844-5b268c057b72?auto=format&fit=crop&w=600&q=60";
+
+// Hardcoded Admin Account
+const ADMIN_USER = { username: 'admin', password: 'admin', role: 'admin' };
+
+const MENU = [
+  { id:1, name:"Schezwan Hakka Noodles", desc:"Wok-tossed noodles in our signature schezwan chutney, crunchy vegetables.", price:180, category:"Desi Chinese", spice:3, tag:"Bestseller", img:"https://images.unsplash.com/photo-1626804475297-41608ea09aeb?auto=format&fit=crop&w=600&q=60" },
+  { id:2, name:"Chilli Chicken Dry", desc:"Crispy chicken tossed with bell peppers and fiery schezwan sauce.", price:240, category:"Desi Chinese", spice:4, tag:"Spicy", img:"https://images.unsplash.com/photo-1569058242253-92a9c755a0ec?auto=format&fit=crop&w=600&q=60" },
+  { id:3, name:"Veg Manchurian", desc:"Cabbage-carrot dumplings simmered in a tangy schezwan-garlic gravy.", price:160, category:"Desi Chinese", spice:2, tag:"Veg", img:"https://images.unsplash.com/photo-1567188040759-fb8a883dc6d8?auto=format&fit=crop&w=600&q=60" },
+  { id:4, name:"Schezwan Fried Rice", desc:"Long-grain rice tossed with schezwan paste, spring onion and beans.", price:170, category:"Desi Chinese", spice:3, tag:"Bestseller", img:"https://images.unsplash.com/photo-1603133872878-684f208fb84b?auto=format&fit=crop&w=600&q=60" },
+  { id:5, name:"Dragon Chicken", desc:"Chicken in a sticky, sweet and fiery schezwan glaze with sesame.", price:260, category:"Desi Chinese", spice:5, tag:"Chef's Pick", img:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTKkkS5dO1n1kFp0im4tF-9FXIlf_n8oJrhTQ&s" },
+  { id:6, name:"Spring Rolls (4 pc)", desc:"Crispy rolls stuffed with vegetables, served with schezwan dip.", price:120, category:"Desi Chinese", spice:1, tag:"Veg", img:"https://images.unsplash.com/photo-1606756790138-261d2b21cd75?auto=format&fit=crop&w=600&q=60" },
+  
+  { id:7, name:"Classic Cheese Burger", desc:"Juicy patty, cheddar, lettuce, and our secret schezwan mayo.", price:220, category:"Western", spice:2, tag:"New", img:"https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=600&q=60" },
+  { id:8, name:"Margherita Pizza", desc:"Wood-fired pizza with fresh basil, mozzarella, and tomato base.", price:320, category:"Western", spice:1, tag:"Veg", img:"https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?auto=format&fit=crop&w=600&q=60" },
+  { id:9, name:"Red Sauce Pasta", desc:"Penne tossed in spicy arrabbiata sauce, olives, and herbs.", price:190, category:"Western", spice:2, tag:"Veg", img:"https://images.unsplash.com/photo-1551183053-bf91a1d81141?auto=format&fit=crop&w=600&q=60" },
+  { id:10, name:"Loaded Schezwan Fries", desc:"Crispy fries topped with cheese, jalapeños, and schezwan chutney.", price:150, category:"Western", spice:3, tag:"Bestseller", img:"https://images.unsplash.com/photo-1576107232684-1279f390859f?auto=format&fit=crop&w=600&q=60" },
+  { id:11, name:"Grilled Chicken Steak", desc:"Herb-marinated chicken breast served with sautéed veggies.", price:280, category:"Western", spice:1, tag:"High Protein", img:"https://images.unsplash.com/photo-1606756790138-261d2b21cd75?auto=format&fit=crop&w=600&q=60" },
+  { id:12, name:"Garlic Bread Sticks", desc:"Oven-fresh bread sticks loaded with garlic butter and cheese.", price:130, category:"Western", spice:1, tag:"Veg", img:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTRlKr4LFugm0sEOGZILFFuHkPk2LMbMrewrQ&s" }
+];
+
+const CATEGORIES = ["All", "Desi Chinese", "Western"];
+
+// ============ Storage Keys ============
+// NEW KEY to ensure all previous global orders are wiped and ignored
+const USER_ORDERS_KEY = 'schezwan_story_v2_user_orders'; 
+const CART_KEY = 'schezwan_story_cart';
+const USERS_KEY = 'schezwan_story_users';
+const CURRENT_USER_KEY = 'schezwan_story_current_user';
+
+// ============ Storage Helpers ============
+// Orders are stored as a dictionary: { "username1": [...orders], "username2": [...orders] }
+function loadAllUserOrdersMap() { 
+  try { return JSON.parse(localStorage.getItem(USER_ORDERS_KEY)) || {}; } 
+  catch { return {}; } 
+}
+function loadUserOrders(username) { 
+  const map = loadAllUserOrdersMap();
+  return map[username] || []; 
+}
+function saveUserOrders(username, orders) { 
+  const map = loadAllUserOrdersMap();
+  map[username] = orders;
+  localStorage.setItem(USER_ORDERS_KEY, JSON.stringify(map));
+}
+
+function loadCart() { try { return JSON.parse(localStorage.getItem(CART_KEY)) || []; } catch { return []; } }
+function saveCart(cart) { localStorage.setItem(CART_KEY, JSON.stringify(cart)); }
+function loadUsers() { try { return JSON.parse(localStorage.getItem(USERS_KEY)) || []; } catch { return []; } }
+function saveUsers(users) { localStorage.setItem(USERS_KEY, JSON.stringify(users)); }
+function loadCurrentUser() { try { return JSON.parse(localStorage.getItem(CURRENT_USER_KEY)); } catch { return null; } }
+function saveCurrentUser(user) { 
+  if(user) localStorage.setItem(CURRENT_USER_KEY, JSON.stringify(user));
+  else localStorage.removeItem(CURRENT_USER_KEY);
+}
+
+function genOrderId() { return 'SS' + Date.now().toString(36).toUpperCase().slice(-5) + Math.floor(Math.random()*36).toString(36).toUpperCase(); }
+
+// ============ Components ============
+function Toast({ toasts }) {
+  return html`
+    <div class="toast-wrap">
+      ${toasts.map(t => html`
+        <div key=${t.id} class="toast">
+          <i class="fa-solid fa-pepper-hot"></i>
+          <span>${t.msg}</span>
+        </div>
+      `)}
+    </div>
+  `;
+}
+
+function Header({ cartCount, onOpenCart, currentUser, onOpenAuth, onLogout }) {
+  return html`
+    <header class="topbar">
+      <nav class="nav">
+        <div class="brand" onClick=${() => window.scrollTo({top:0, behavior:'smooth'})}>
+          <div class="brand-mark"></div>
+          <div class="brand-text">
+            <strong>Schezwan Story</strong>
+            <span>Indo-Chinese & Western Kitchen</span>
+          </div>
+        </div>
+        <div class="nav-links">
+          <a href="#menu">Menu</a>
+          <a href="#orders">My Orders</a>
+          <a href="#about">Our Story</a>
+          <a href="#contact">Contact</a>
+        </div>
+        
+        <div class="auth-area">
+          ${currentUser ? html`
+            <div class=${currentUser.role === 'admin' ? 'user-badge admin-badge' : 'user-badge'}>
+              <i class=${currentUser.role === 'admin' ? 'fa-solid fa-user-shield' : 'fa-solid fa-user-circle'}></i> 
+              ${currentUser.username} ${currentUser.role === 'admin' ? '(Admin)' : ''}
+            </div>
+            <button class="auth-btn" onClick=${onLogout}>
+              <i class="fa-solid fa-right-from-bracket"></i> <span>Logout</span>
+            </button>
+          ` : html`
+            <button class="auth-btn" onClick=${onOpenAuth}>
+              <i class="fa-solid fa-right-to-bracket"></i> <span>Login / Register</span>
+            </button>
+          `}
+          
+          <button class="cart-btn" onClick=${onOpenCart}>
+            <i class="fa-solid fa-bag-shopping"></i>
+            <span>Cart</span>
+            ${cartCount > 0 ? html`<span class="cart-count">${cartCount}</span>` : null}
+          </button>
+        </div>
+      </nav>
+    </header>
+  `;
+}
+
+function Hero() {
+  return html`
+    <section class="hero">
+      <div>
+        <div class="hero-eyebrow">
+          <span class="pulse-dot"></span>
+          <span>Open now · Delivering in 35 min</span>
+        </div>
+        <h1>Taste the <em>fiery</em><br/>drop of Schezwan.</h1>
+        <p>Hand-pounded red chilies, garlic and secret spices — slow-cooked into our signature chutney that elevates every Desi Chinese and Western dish we serve.</p>
+        <div class="hero-cta">
+          <button class="btn-primary" onClick=${() => document.getElementById('menu').scrollIntoView({behavior:'smooth'})}>
+            <i class="fa-solid fa-utensils"></i> Order Now
+          </button>
+          <button class="btn-ghost" onClick=${() => document.getElementById('orders').scrollIntoView({behavior:'smooth'})}>
+            <i class="fa-solid fa-receipt"></i> Track Order
+          </button>
+        </div>
+        <div class="hero-stats">
+          <div class="stat"><strong>27+</strong><span>Years of mastery</span></div>
+          <div class="stat"><strong>4.8★</strong><span>12k+ happy diners</span></div>
+          <div class="stat"><strong>15min</strong><span>Average prep time</span></div>
+        </div>
+      </div>
+      <div class="hero-visual">
+        <div class="hero-ring"></div>
+        <img src=${CHUTNEY_IMG} class="hero-bowl-img" alt="Schezwan Chutney Bowl" />
+      </div>
+    </section>
+  `;
+}
+
+function DishCard({ dish, onAdd }) {
+  const spiceDots = '•'.repeat(dish.spice);
+  return html`
+    <article class="dish">
+      <div class="dish-img">
+        <img src=${dish.img} alt=${dish.name} loading="lazy"/>
+        <span class="dish-tag">${dish.tag}</span>
+        <span class="dish-spice"><i class="fa-solid fa-fire"></i> ${spiceDots}</span>
+      </div>
+      <div class="dish-body">
+        <h3 class="dish-name">${dish.name}</h3>
+        <p class="dish-desc">${dish.desc}</p>
+        <div class="dish-foot">
+          <div class="dish-price">₹${dish.price}<small>/ plate</small></div>
+          <button class="add-btn" onClick=${() => onAdd(dish)} aria-label=${"Add " + dish.name}>
+            <i class="fa-solid fa-plus"></i>
+          </button>
+        </div>
+      </div>
+    </article>
+  `;
+}
+
+function MenuSection({ onAdd, onToast }) {
+  const [active, setActive] = useState('All');
+  const filtered = useMemo(() => active === 'All' ? MENU : MENU.filter(d => d.category === active), [active]);
+
+  return html`
+    <section class="section" id="menu">
+      <div class="section-head">
+        <div>
+          <h2 class="section-title">Crafted in the <em>wok</em>.</h2>
+        </div>
+        <p class="section-sub">Choose from our Desi Chinese classics or Western favorites, all customizable with our signature schezwan chutney.</p>
+      </div>
+
+      <div class="filters">
+        ${CATEGORIES.map(c => html`
+          <button key=${c} class=${"filter-chip " + (active === c ? 'active' : '')} onClick=${() => setActive(c)}>
+            ${c}
+          </button>
+        `)}
+      </div>
+
+      <div class="menu-grid">
+        ${filtered.map(d => html`<${DishCard} key=${d.id} dish=${d} onAdd=${(dish) => { onAdd(dish); onToast(dish.name + ' added to cart'); }} />`)}
+      </div>
+    </section>
+  `;
+}
+
+function CartDrawer({ open, cart, onClose, onUpdateQty, onCheckout }) {
+  const subtotal = cart.reduce((s, it) => s + it.price * it.qty, 0);
+  const delivery = subtotal > 0 ? 30 : 0;
+  const total = subtotal + delivery;
+
+  return html`
+    <div class=${"overlay " + (open ? 'open' : '')} onClick=${onClose}></div>
+    <aside class=${"cart-drawer " + (open ? 'open' : '')}>
+      <div class="cart-head">
+        <h3>Your Cart</h3>
+        <button class="close-x" onClick=${onClose}><i class="fa-solid fa-xmark"></i></button>
+      </div>
+
+      <div class="cart-items">
+        ${cart.length === 0 ? html`
+          <div class="cart-empty">
+            <i class="fa-solid fa-bowl-food"></i>
+            <h4 style=${{fontFamily:'Fraunces', fontSize:'20px', marginBottom:'6px'}}>Your cart is empty</h4>
+            <p style=${{fontSize:'14px'}}>Add some schezwan magic from the menu.</p>
+          </div>
+        ` : cart.map(item => html`
+          <div class="cart-item" key=${item.id}>
+            <div class="cart-item-img">
+              <img src=${item.img} alt=${item.name}/>
+            </div>
+            <div class="cart-item-info">
+              <h4>${item.name}</h4>
+              <small>₹${item.price} each</small>
+              <div class="qty">
+                <button onClick=${() => onUpdateQty(item.id, item.qty - 1)}><i class="fa-solid fa-minus"></i></button>
+                <span>${item.qty}</span>
+                <button onClick=${() => onUpdateQty(item.id, item.qty + 1)}><i class="fa-solid fa-plus"></i></button>
+              </div>
+            </div>
+            <div class="cart-item-price">₹${item.price * item.qty}</div>
+          </div>
+        `)}
+      </div>
+
+      <div class="cart-foot">
+        <div class="cart-total">
+          <strong>Subtotal</strong>
+          <span style=${{fontSize:'15px'}}>₹${subtotal}</span>
+        </div>
+        <div class="cart-total">
+          <strong>Delivery</strong>
+          <span style=${{fontSize:'15px'}}>₹${delivery}</span>
+        </div>
+        <div class="cart-total" style=${{borderTop:'1px dashed var(--border)', paddingTop:'14px', marginTop:'6px'}}>
+          <strong>Total</strong>
+          <span class="amount">₹${total}<small>incl. taxes</small></span>
+        </div>
+        <button class="checkout-btn" disabled=${cart.length === 0} onClick=${onCheckout}>
+          <i class="fa-solid fa-fire"></i> Place Order
+        </button>
+      </div>
+    </aside>
+  `;
+}
+
+function OrderModal({ open, order, onClose }) {
+  if (!order) return null;
+  return html`
+    <div class=${"modal " + (open ? 'open' : '')} onClick=${onClose}>
+      <div class="modal-card" onClick=${(e) => e.stopPropagation()}>
+        <div class="modal-icon"><i class="fa-solid fa-check"></i></div>
+        <h3>Order Confirmed!</h3>
+        <p>Your feast is being prepared with love and schezwan.</p>
+        <div class="modal-order-id">Order ID: ${order.id}</div>
+        <p style=${{fontSize:'14px', marginBottom:'20px'}}>Estimated delivery in <strong style=${{color:'var(--accent)'}}>35 minutes</strong></p>
+        <button class="btn-primary" style=${{width:'100%', justifyContent:'center'}} onClick=${onClose}>
+          <i class="fa-solid fa-receipt"></i> View My Orders
+        </button>
+      </div>
+    </div>
+  `;
+}
+
+function AuthModal({ open, onClose, onAuthSuccess }) {
+  const [mode, setMode] = useState('login');
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    setError('');
+    
+    if (!username || !password) {
+      setError("Please fill in all fields");
+      return;
+    }
+
+    // Check for hardcoded admin login
+    if (username === ADMIN_USER.username && password === ADMIN_USER.password) {
+      const adminUser = { username: ADMIN_USER.username, role: ADMIN_USER.role };
+      saveCurrentUser(adminUser);
+      onAuthSuccess(adminUser);
+      setUsername(''); setPassword(''); setMode('login');
+      onClose();
+      return;
+    }
+
+    const users = loadUsers();
+    
+    if (mode === 'register') {
+      if (users.find(u => u.username === username)) {
+        setError("Username already exists");
+        return;
+      }
+      // New users get 'user' role
+      const newUser = { username, password, role: 'user' };
+      users.push(newUser);
+      saveUsers(users);
+      saveCurrentUser(newUser);
+      onAuthSuccess(newUser);
+    } else {
+      const user = users.find(u => u.username === username && u.password === password);
+      if (!user) {
+        setError("Invalid username or password");
+        return;
+      }
+      saveCurrentUser(user);
+      onAuthSuccess(user);
+    }
+
+    // Reset & Close
+    setUsername(''); setPassword(''); setMode('login');
+    onClose();
+  };
+
+  return html`
+    <div class=${"modal " + (open ? 'open' : '')} onClick=${onClose}>
+      <div class="modal-card" onClick=${(e) => e.stopPropagation()}>
+        <div class="modal-icon"><i class="fa-solid ${mode === 'login' ? 'fa-right-to-bracket' : 'fa-user-plus'}"></i></div>
+        <h3>${mode === 'login' ? 'Welcome Back!' : 'Create Account'}</h3>
+        <p>${mode === 'login' ? 'Login to track your schezwan orders.' : 'Register to start your spicy journey.'}</p>
+        
+        <form class="auth-form" onSubmit=${handleSubmit}>
+          ${error && html`<div class="auth-error">${error}</div>`}
+          <input 
+            class="auth-input" type="text" placeholder="Username"
+            value=${username} onChange=${(e) => setUsername(e.target.value)}
+          />
+          <input 
+            class="auth-input" type="password" placeholder="Password"
+            value=${password} onChange=${(e) => setPassword(e.target.value)}
+          />
+          <button type="submit" class="btn-primary auth-submit-btn">
+            <i class="fa-solid ${mode === 'login' ? 'fa-arrow-right-to-bracket' : 'fa-user-check'}"></i>
+            ${mode === 'login' ? 'Login' : 'Register'}
+          </button>
+        </form>
+
+        <div class="auth-switch">
+          ${mode === 'login' ? "Don't have an account?" : "Already have an account?"}
+          <button onClick=${() => { setMode(mode === 'login' ? 'register' : 'login'); setError(''); }}>
+            ${mode === 'login' ? 'Register here' : 'Login here'}
+          </button>
+        </div>
+        
+        <div class="auth-hint">
+          <i class="fa-solid fa-circle-info"></i> Admin login: username <strong>admin</strong>, password <strong>admin</strong>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+function OrdersSection({ orders, onUpdateStatus, currentUser }) {
+  const getStatusClass = (status) => {
+    if(status === 'Completed') return 'status-completed';
+    if(status === 'Cancelled') return 'status-cancelled';
+    return 'status-preparing';
+  };
+
+  const isAdmin = currentUser && currentUser.role === 'admin';
+
+  return html`
+    <section class="section" id="orders">
+      <div class="section-head">
+        <div>
+          <h2 class="section-title">Your <em>orders</em>.</h2>
+        </div>
+        <p class="section-sub">
+          ${currentUser ? (isAdmin ? 'Admin View: Complete or cancel any preparing order.' : 'Track or cancel your active orders.') : 'Login to view your unique order history.'}
+        </p>
+      </div>
+
+      ${orders.length === 0 ? html`
+        <div class="empty-state">
+          <i class="fa-solid fa-receipt"></i>
+          <h3>${currentUser ? "No orders yet" : "Not logged in"}</h3>
+          <p>${currentUser ? "Place your first order and it'll show up here." : "Please login to view your unique order history."}</p>
+        </div>
+      ` : html`
+        <div class="orders-list">
+          ${orders.slice().reverse().map(o => html`
+            <div class="order-card" key=${o.id}>
+              <div class="order-id">
+                ${o.id}
+                <small>${new Date(o.timestamp).toLocaleString('en-IN', { day:'numeric', month:'short', hour:'2-digit', minute:'2-digit' })}</small>
+              </div>
+              <div class="order-items">
+                ${o.items.map(it => it.qty + '× ' + it.name).join(' · ')}
+              </div>
+              <div class=${"order-status " + getStatusClass(o.status)}>
+                <span class="dot"></span> ${o.status}
+              </div>
+              <div class="order-total">₹${o.total}</div>
+              ${o.status === 'Preparing' && html`
+                <div class="order-actions">
+                  <button class="action-btn cancel-btn" onClick=${() => onUpdateStatus(o.id, 'Cancelled')}>
+                    <i class="fa-solid fa-xmark"></i> Cancel
+                  </button>
+                  ${isAdmin && html`
+                    <button class="action-btn complete-btn" onClick=${() => onUpdateStatus(o.id, 'Completed')}>
+                      <i class="fa-solid fa-check"></i> Complete
+                    </button>
+                  `}
+                </div>
+              `}
+            </div>
+          `)}
+        </div>
+      `}
+    </section>
+  `;
+}
+
+function AboutStrip() {
+  return html`
+    <section class="section" id="about" style=${{paddingTop:'20px'}}>
+      <div style=${{display:'grid', gridTemplateColumns:'1fr 1fr', gap:'60px', alignItems:'center', background:'var(--card)', borderRadius:'32px', padding:'60px', border:'1px solid var(--border)', boxShadow:'var(--shadow)', position:'relative', overflow:'hidden'}}>
+        <div>
+          <div class="hero-eyebrow"><span class="pulse-dot"></span><span>Our Secret</span></div>
+          <h2 style=${{fontSize:'clamp(30px,4vw,46px)', lineHeight:'1.05', marginBottom:'20px'}}>Born in a Sichuan kitchen, <em style=${{color:'var(--accent)', fontStyle:'italic'}}>reborn in Mumbai.</em></h2>
+          <p style=${{color:'var(--muted)', marginBottom:'16px'}}>In 1998, our founder Master Liang brought his grandmother's chili paste recipe to the streets of Mumbai. Three decades later, every drop of our schezwan chutney is still hand-pounded in small batches.</p>
+          <p style=${{color:'var(--muted)'}}>Sun-dried Kashmiri and Byadgi chilies, garlic from the Konkan coast, and 12 whole spices — slow-roasted, ground, and simmered for six hours. That's the drop we put in everything.</p>
+        </div>
+        <div style=${{position:'relative', height:'320px', display:'flex', alignItems:'center', justifyContent:'center'}}>
+          <img src=${CHUTNEY_IMG} style=${{width:'280px', height:'280px', borderRadius:'50%', objectFit:'cover', boxShadow:'0 20px 60px rgba(200,16,46,0.4)', border:'6px solid #fff'}} alt="Schezwan Chutney Jar" />
+        </div>
+      </div>
+    </section>
+  `;
+}
+
+function Footer() {
+  return html`
+    <footer id="contact">
+      <div class="footer-inner">
+        <div>
+          <div class="brand">
+            <div class="brand-mark"></div>
+            <div class="brand-text">
+              <strong style=${{color:'var(--bg)'}}>Schezwan Story</strong>
+              <span>Indo-Chinese Kitchen</span>
+            </div>
+          </div>
+          <p class="footer-brand">Hand-pounded schezwan chutney, wok-fired dishes, and 27 years of obsession with the perfect spice.</p>
+        </div>
+        <div>
+          <h4>Explore</h4>
+          <ul>
+            <li><a href="#menu">Full Menu</a></li>
+            <li><a href="#orders">Track Order</a></li>
+            <li><a href="#about">Our Story</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>Visit</h4>
+          <ul>
+            <li>14 Chandni Chowk</li>
+            <li>Mumbai, 400002</li>
+            <li>Open 11am – 11pm</li>
+          </ul>
+        </div>
+        <div>
+          <h4>Contact</h4>
+          <ul>
+            <li><a href="tel:+912200000000">+91 22 0000 0000</a></li>
+            <li><a href="mailto:hello@schezwanstory.in">hello@schezwanstory.in</a></li>
+            <li>@schezwanstory</li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>© 2025 Schezwan Story. All rights reserved.</span>
+        <span>Made with <i class="fa-solid fa-pepper-hot" style=${{color:'var(--chili)'}}></i> in Mumbai</span>
+      </div>
+    </footer>
+  `;
+}
+
+function App() {
+  const [cart, setCart] = useState(() => loadCart());
+  const [cartOpen, setCartOpen] = useState(false);
+  const [currentUser, setCurrentUser] = useState(() => loadCurrentUser());
+  // Initialize orders based on the current user
+  const [orders, setOrders] = useState(() => currentUser ? loadUserOrders(currentUser.username) : []);
+  const [modalOrder, setModalOrder] = useState(null);
+  const [modalOpen, setModalOpen] = useState(false);
+  const [authOpen, setAuthOpen] = useState(false);
+  const [toasts, setToasts] = useState([]);
+
+  // Save cart globally
+  useEffect(() => { saveCart(cart); }, [cart]);
+  
+  // Save orders to the specific user's storage slot
+  useEffect(() => { 
+    if (currentUser) {
+      saveUserOrders(currentUser.username, orders);
+    }
+  }, [orders, currentUser]);
+
+  // Load specific user's orders whenever the user logs in/out
+  useEffect(() => {
+    if (currentUser) {
+      setOrders(loadUserOrders(currentUser.username));
+    } else {
+      setOrders([]); // Clear orders from view on logout
+    }
+  }, [currentUser]);
+
+  const pushToast = (msg) => {
+    const id = Date.now() + Math.random();
+    setToasts(t => [...t, { id, msg }]);
+    setTimeout(() => setToasts(t => t.filter(x => x.id !== id)), 3000);
+  };
+
+  const addToCart = (dish) => {
+    setCart(prev => {
+      const found = prev.find(i => i.id === dish.id);
+      if (found) return prev.map(i => i.id === dish.id ? { ...i, qty: i.qty + 1 } : i);
+      return [...prev, { id: dish.id, name: dish.name, price: dish.price, img: dish.img, qty: 1 }];
+    });
+  };
+  
+  const updateQty = (id, qty) => {
+    if (qty <= 0) {
+      setCart(prev => prev.filter(i => i.id !== id));
+    } else {
+      setCart(prev => prev.map(i => i.id === id ? { ...i, qty } : i));
+    }
+  };
+  
+  const checkout = () => {
+    if (cart.length === 0) return;
+    
+    // Enforce login to place an order
+    if (!currentUser) {
+      pushToast("Please login to place an order");
+      setCartOpen(false);
+      setAuthOpen(true);
+      return;
+    }
+
+    const subtotal = cart.reduce((s, it) => s + it.price * it.qty, 0);
+    const total = subtotal + 30;
+    const order = {
+      id: genOrderId(),
+      items: cart.map(it => ({ name: it.name, qty: it.qty, price: it.price })),
+      total,
+      status: 'Preparing',
+      timestamp: Date.now(),
+    };
+    setOrders(prev => [...prev, order]);
+    setCart([]);
+    setCartOpen(false);
+    setModalOrder(order);
+    setModalOpen(true);
+  };
+
+  const updateOrderStatus = (orderId, newStatus) => {
+    setOrders(prev => prev.map(o => o.id === orderId ? { ...o, status: newStatus } : o));
+    pushToast(`Order marked as ${newStatus}`);
+  };
+
+  const handleAuthSuccess = (user) => {
+    setCurrentUser(user);
+    pushToast(`Welcome, ${user.username}!`);
+  };
+
+  const handleLogout = () => {
+    saveCurrentUser(null);
+    setCurrentUser(null);
+    pushToast("Logged out successfully");
+  };
+
+  const cartCount = cart.reduce((s, it) => s + it.qty, 0);
+
+  return html`
+    <${React.Fragment}>
+      <${Header} 
+        cartCount=${cartCount} 
+        onOpenCart=${() => setCartOpen(true)} 
+        currentUser=${currentUser}
+        onOpenAuth=${() => setAuthOpen(true)}
+        onLogout=${handleLogout}
+      />
+      <${Hero} />
+      <${MenuSection} onAdd=${addToCart} onToast=${pushToast} />
+      <${AboutStrip} />
+      <${OrdersSection} orders=${orders} onUpdateStatus=${updateOrderStatus} currentUser=${currentUser} />
+      <${Footer} />
+
+      <${CartDrawer}
+        open=${cartOpen}
+        cart=${cart}
+        onClose=${() => setCartOpen(false)}
+        onUpdateQty=${updateQty}
+        onCheckout=${checkout}
+      />
+
+      <${OrderModal}
+        open=${modalOpen}
+        order=${modalOrder}
+        onClose=${() => { setModalOpen(false); document.getElementById('orders').scrollIntoView({behavior:'smooth'}); }}
+      />
+
+      <${AuthModal}
+        open=${authOpen}
+        onClose=${() => setAuthOpen(false)}
+        onAuthSuccess=${handleAuthSuccess}
+      />
+
+      <${Toast} toasts=${toasts} />
+
+      <img src=${CHUTNEY_IMG} class="corner-chutney" alt="Signature Schezwan Chutney" onClick=${() => document.getElementById('about').scrollIntoView({behavior:'smooth'})} />
+      <div class="corner-tooltip">Our Signature Chutney!</div>
+    <//>
+  `;
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(html`<${App} />`);
+</script>
+</body>
+</html>
